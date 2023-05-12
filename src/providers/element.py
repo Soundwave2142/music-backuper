@@ -24,11 +24,27 @@ class QuickElementProvider:
     def t(self, key: str) -> str:
         return self.__.t(key)
 
-    def create_window(self, root, title: str):
-        root.geometry(self.theme.window_geometry_size)
-        root.title(self.__.t(title))
-        root.configure(**self.theme.window_configure)
+    def create_window(self, window, title: str):
+        window.geometry(self.theme.window_geometry_size)
+        window.title(self.__.t(title))
+        window.configure(**self.theme.window_configure)
 
-    def create_label(self, root, label: str):
-        label = tk.Label(root, text=label, font=self.theme.font_normal)
-        label.pack(**self.theme.label_padding)
+        return window
+
+    def create_label(self, parent, label: str, grid_config=None):
+        label = tk.Label(parent, text=self.__.t(label), font=self.theme.font_normal)
+        self.__pack_or_grid(label, parent, self.theme.label_pack, grid_config)
+
+        return label
+
+    def create_textbox(self, parent, grid_config=None):
+        textbox = tk.Entry(parent, font=self.theme.font_normal)
+        self.__pack_or_grid(textbox, parent, {}, grid_config)
+
+        return textbox
+
+    def __pack_or_grid(self, element, parent, pack_config, grid_config):
+        if isinstance(parent, tk.Frame):
+            element.grid(**grid_config)
+        else:
+            element.pack(**pack_config)
