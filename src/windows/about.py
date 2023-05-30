@@ -1,20 +1,18 @@
-# outside libs
-import tkinter as tk
-
-# classes
-from src.providers.config import ConfigProvider
-from src.providers.element import QuickElementProvider
+from tkinter import Toplevel
 from src.windows._abstract import Window
 
 
-# TODO: describe classes and functions
 class WindowAbout(Window):
-    def __init__(self, config: ConfigProvider, quick_element: QuickElementProvider):
-        self.config = config
-        self.QE = quick_element
+    """
+    Class for window for about section of the app.
+    """
+    window: Toplevel = Toplevel
+    window_title: str = 'about_window.title'
 
-        self.window = tk.Toplevel()
-        self.render_window()
-
-    def render_window(self):
-        self.QE.create_window(self.window, 'about_window.title')
+    def render_root(self):
+        """
+        Currently does not render anything, future plans include to have some description of the functionality of the
+        app.
+        @return: None
+        """
+        pass

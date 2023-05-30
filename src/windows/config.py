@@ -1,20 +1,18 @@
 # outside libs
-import tkinter as tk
-
-# classes
-from src.providers.config import ConfigProvider
-from src.providers.element import QuickElementProvider
+from tkinter import Toplevel
 from src.windows._abstract import Window
 
 
-# TODO: describe classes and functions
 class WindowConfig(Window):
-    def __init__(self, config: ConfigProvider, quick_element: QuickElementProvider):
-        self.config = config
-        self.QE = quick_element
+    """
+    Class for window for configuration of the app.
+    """
+    window: Toplevel = Toplevel
+    window_title: str = 'config_window.title'
 
-        self.window = tk.Toplevel()
-        self.render_window()
-
-    def render_window(self):
-        self.QE.create_window(self.window, 'config_window.title')
+    def render_root(self) -> None:
+        """
+        Currently does not render anything, future plans include to have some of the values like paths and so on.
+        @return: None
+        """
+        pass

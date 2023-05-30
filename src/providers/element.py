@@ -31,13 +31,13 @@ class QuickElementProvider:
 
         return window
 
-    def create_label(self, parent, label: str, grid_config=None):
+    def create_label(self, parent, label: str, grid_config=None) -> tk.Label:
         label = tk.Label(parent, text=self.__.t(label), font=self.theme.font_normal)
         self.__pack_or_grid(label, parent, self.theme.label_pack, grid_config)
 
         return label
 
-    def create_textbox(self, parent, grid_config=None):
+    def create_textbox(self, parent, grid_config=None) -> tk.Entry:
         textbox = tk.Entry(parent, font=self.theme.font_normal)
         self.__pack_or_grid(textbox, parent, {}, grid_config)
 
