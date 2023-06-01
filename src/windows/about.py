@@ -6,7 +6,7 @@ class WindowAbout(Window):
     """
     Class for window for about section of the app.
     """
-    window: Toplevel = Toplevel
+    window_class: type = Toplevel
     window_title: str = 'about_window.title'
 
     def render_root(self):

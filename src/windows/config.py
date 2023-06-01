@@ -7,7 +7,7 @@ class WindowConfig(Window):
     """
     Class for window for configuration of the app.
     """
-    window: Toplevel = Toplevel
+    window_class: type = Toplevel
     window_title: str = 'config_window.title'
 
     def render_root(self) -> None:

@@ -6,8 +6,8 @@ from tkinter import Tk
 from tkinter import Toplevel
 from tkinter import Menu
 
-from src.providers.config import ConfigProvider
-from src.providers.element import QuickElementProvider
+from src.providers.config import config
+from src.providers.element import quick_element as qe
 
 
 class Window(ABC):
@@ -18,27 +18,18 @@ class Window(ABC):
                       TopLevel object of the window itself is created depending on what type was defined as default.
         window_title: string key for location that will be given to title of window.
         windows:      dictionary of open windows, only filled if there is any open sub-windows.
-        config:       [described in __init__]
-        QE:           [described in __init__]
     """
-    window: Tk | Toplevel = Toplevel
+    window_class: type = Toplevel
+    window: Tk | Toplevel = None
     window_title: str = 'default_window.title'
     windows: dict[str, Window] = {}  # collection of sub-windows that are currently open
 
-    def __init__(self, config: ConfigProvider, quick_element: QuickElementProvider):
-        """
-        Each child instance of Window should hold a set of objects that are most frequently used throughout the app.
-        @param config: object instance of a config class that holds and gets access to app config.
-        @param quick_element: object instance of class that acts as a quick creator of certain repeating elements.
-        """
-        self.config = config
-        self.QE = quick_element
-
-        self.window = self.window()
+    def __init__(self):
+        self.window = self.window_class()
         self.menubar = Menu(self.window)
 
         # create window and render menu + main window contents
-        self.QE.create_window(self.window, self.window_title)
+        qe.create_window(self.window, self.window_title)
         self.render_menu()
         self.render_root()
 
@@ -57,15 +48,26 @@ class Window(ABC):
         """
         pass
 
-    def destroy(self) -> None:
+    def re_render(self) -> None:
         """
-        Function is called when the window needs be destroyed and recreated, essentially acting as re-render.
+        Destroys current window and re-creates it.
         @return: None.
         """
         # TODO: add checks asking - are you sure?
 
         self.window.destroy()
-        self.__init__(self.config, self.QE)
+        self.__init__()
+
+    def config_switcher(self, name: str, value: str) -> None:
+        """
+        Acts as switch, for example for switching language or theme. Sets a value to config and re-renders current
+        window.
+        @param name: config value name.
+        @param value: config value.
+        @return: None.
+        """
+        config.set(name, value)
+        self.re_render()
 
     def call_window(self, window_class: type, window_close_function: type) -> None:
         """
@@ -77,7 +79,7 @@ class Window(ABC):
         if window_class.__name__ in self.windows:
             self.windows[window_class.__name__].window.focus_set()
         else:
-            window = window_class(self.config, self.QE)
+            window = window_class()
             self.windows[window_class.__name__] = window
 
             window.window.protocol("WM_DELETE_WINDOW", partial(window_close_function, window))

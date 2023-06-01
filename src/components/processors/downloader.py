@@ -1,3 +1,4 @@
 # TODO: implement
 class ComponentProcessorDownloader:
-    pass
+    def process(self):
+        pass

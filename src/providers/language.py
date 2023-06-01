@@ -1,4 +1,7 @@
-class LanguageProvider:
+from src.providers.config import config
+
+
+class __LanguageProvider:
     """
     Holds a text for the whole app for English, Ukrainian and Norwegian languages. Call method "t" for translation.
     Perhaps investigate some better implementations of this? For example: Move string arrays to some file and read it.
@@ -41,3 +44,10 @@ class LanguageProvider:
             return self.en[key]
 
         return key
+
+
+translator = __LanguageProvider(config.get('language', 'en'))
+
+
+def translate(key: str) -> str:
+    return translator.t(key)
