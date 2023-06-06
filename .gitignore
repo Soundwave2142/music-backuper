@@ -3,4 +3,6 @@
 /venv
 
 # project specific
+/downloaded_music
+/tmp
 config.json

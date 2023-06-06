@@ -1,7 +1,7 @@
-from os import path
 from abc import ABC, abstractmethod
 from typing import List
 from dataclasses import dataclass, field
+from os import path
 from tkinter import Entry, Label
 
 from src.providers.language import translate as __
@@ -40,14 +40,27 @@ class AbstractValidatorRule(ABC):
     """
 
     @abstractmethod
-    def validate(self, value) -> None | ValidatorErrorBag:
+    def validate(self, value: any) -> None | ValidatorErrorBag:
+        """
+        Contains code to validate value.
+        @param value: to validate.
+        @return: Nothing or error bag.
+        """
         pass
 
 
 class NotEmptyRule(AbstractValidatorRule):
+    """
+    Validation rule for checking if value is empty.
+    """
     error_message = 'validation.field_empty'
 
-    def validate(self, value) -> None | ValidatorErrorBag:
+    def validate(self, value: any) -> None | ValidatorErrorBag:
+        """
+        Very simple check to see if value is empty.
+        @param value: to validate.
+        @return: Nothing or error bag.
+        """
         if isinstance(value, str):
             value.strip()
 
@@ -56,15 +69,24 @@ class NotEmptyRule(AbstractValidatorRule):
 
 
 class PathExistsRule(AbstractValidatorRule):
+    """
+    Validation rule to see if value is path (that exists) in the system.
+    """
     error_message = 'validation.path_does_not_exists'
 
     def validate(self, value) -> None | ValidatorErrorBag:
+        """
+        Simple check if value is path (that exists) in the system.
+        @param value: path to validate
+        @return: Nothing or error bag.
+        """
         if not path.exists(value):
             return ValidatorErrorBag(self.error_message)
 
 
 def validate(value: any, rules: List[AbstractValidatorRule], return_bag: bool = True) -> None | str | ValidatorErrorBag:
     """
+    Validates value against given set of rules.
     @param value: value that will be validated in rules.
     @param rules: array of AbstractValidatorRule objects that will validate the value.
     @param return_bag: boolean to return entire bag or only error message.
@@ -82,6 +104,13 @@ def validate(value: any, rules: List[AbstractValidatorRule], return_bag: bool = 
 
 
 def validate_input(entry_input: Entry, error_label: Label, rules: List[AbstractValidatorRule]) -> bool:
+    """
+    Validates input against given set of rules and sets (or clears) an error to (or from) a label.
+    @param entry_input: input to validate.
+    @param error_label: set error text to in case there is an error.
+    @param rules: array of AbstractValidatorRule objects that will validate the value.
+    @return: True or False depending on if there is any errors or not.
+    """
     result = validate(entry_input.get(), rules)
 
     # if there is no validation problems, hide the label and return positive result

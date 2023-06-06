@@ -1,4 +1,4 @@
-from src.windows.root import WindowRoot
+from src.windows.mains import WindowRoot
 
 # start main window
 window = WindowRoot()
